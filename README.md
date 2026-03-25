@@ -114,7 +114,7 @@ Particle counts, runtimes, and real-time factors (RTF) for each resolution are r
 ### Requirements
 
 - **DualSPHysics v5.4.3** — available at [https://dual.sphysics.org/downloads](https://dual.sphysics.org/downloads) (GNU LGPL v3)
-- **Project Chrono** and **MoorDynPlus** — both bundled with the DualSPHysics package; no separate installation required
+- **Project Chrono** and **MoorDynPlus** — both coupled with DualSPHysics; no separate installation required
 - Linux or Windows (scripts provided for Linux; Windows users should refer to the DualSPHysics documentation)
 
 ### Installation
@@ -146,12 +146,12 @@ cd OWSC
 ./allRun.sh
 
 # Or run a single resolution on GPU
-./runGPU.sh
+./runGPU.sh <name_xml>
 ```
 
 > **Warning:** `allRun.sh` does not prompt for confirmation before overwriting existing output folders.
 
-If the DualSPHysics executables are not found automatically, edit the `DUALSPH_PATH` variable at the top of each shell script to point to your local installation.
+If the DualSPHysics executables are not found automatically, edit the `dirbin` variable at the top of each shell script to point to your local installation.
 
 ---
 
@@ -182,11 +182,10 @@ If the DualSPHysics executables are not found automatically, edit the `DUALSPH_P
 If you use these files in your work, please cite the Zenodo archive:
 
 ```bibtex
-@misc{Tagliafierro_2025_sph4wec,
+@misc{Tagliafierro_2026_sph4wec,
   author    = {Tagliafierro, Bonaventura and others},
-  title     = {{SPH4WEC}: DualSPHysics input files for four
-               wave energy converter benchmarks},
-  year      = {2025},
+  title     = {{SPH4WEC}: DualSPHysics input files for four wave energy converter benchmarks},
+  year      = {2026},
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.19212580},
   url       = {https://doi.org/10.5281/zenodo.19212580}
@@ -201,4 +200,4 @@ The data and configuration files in this repository are released under the
 
 You are free to share and adapt the material for any purpose, including commercially, provided that appropriate credit is given to the authors.
 
-© 2025 Bonaventura Tagliafierro
+© 2026 Bonaventura Tagliafierro
