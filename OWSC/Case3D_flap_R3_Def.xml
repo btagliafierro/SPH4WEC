@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<case date="04-05-2023 13:24:32" app="GenCase-ALPHA v5.0.278m (24-04-2023)">
+    <casedef>
+        <constantsdef>
+            <gravity x="0" y="0" z="-9.81" comment="Gravitational acceleration" units_comment="m/s^2" />
+            <rhopgradient value="3" comment="Initial density gradient 1:Rhop0, 2:Water column, 3:Max. water height (default=2)" />
+            <rhop0 value="998" comment="Reference density of the fluid" units_comment="kg/m^3" />
+            <hswl value="0" auto="true" comment="Maximum still water level to calculate speedofsound using coefsound" units_comment="metres (m)" />
+            <gamma value="7" comment="Polytropic constant for water used in the state equation" />
+            <speedsystem value="0" auto="true" comment="Maximum system speed (by default the dam-break propagation is used)" />
+            <coefsound value="25" comment="Coefficient to multiply speedsystem" />
+            <speedsound value="0" auto="true" comment="Speed of sound to use in the simulation (by default speedofsound=coefsound*speedsystem)" />
+            <coefh value="1.2" comment="Coefficient to calculate the smoothing length (h=coefh*sqrt(3*dp^2) in 3D)" />
+            <cflnumber value="0.2" comment="Coefficient to multiply dt" />
+        </constantsdef>
+        <mkconfig boundcount="241" fluidcount="9">
+            <mkorientfluid mk="0" orient="Xyz" />
+        </mkconfig>
+        <geometry>
+            <predefinition>
+                <!-- User-defined variables  -->
+                <newvarcte depth="0.825" />
+				<newvarcte waveLength="4.90" />
+                <newvarcte Tankx0="-11" Pistonx0="-2*waveLength" Tankz0="-depth" />
+                <newvarcte Tankx1="1*waveLength" Tankz1="-depth" />
+				<newvarcte Tankx2="2*waveLength" Tankz2="-depth" />
+                <newvarcte Tankx3="2*waveLength" Tankz3="0.30" />
+				<newvarcte TankWidth="1.31+0.20" />
+                <newvarcte waveHeight="0.25" wavePeriod="2.00" />
+				
+				<newvarcte Dp="0.01" />
+				<newvarcte hingePosZ="Tankz1+0.025" />
+				<newvarcte flapTrim="0.07" />
+            </predefinition>
+            <definition dp="#Dp" comment="Initial inter-particle distance" units_comment="metres (m)">
+                <pointref x="0" y="0" z="#-depth" />
+                <pointmin x="-15" y="#-TankWidth/2" z="-1.5" />
+                <pointmax x="20" y="#TankWidth/2" z="1.2" />
+            </definition>
+            <commands>
+                <list name="GeometryForNormals">
+                    <setactive drawpoints="0" drawshapes="1" />
+                    <setshapemode>actual | bound</setshapemode>
+                    <!-- tank -->
+                    <setmkbound mk="0" />
+                    <drawextrude closed="false">
+                        <extrude x="0" y="1.60" z="0" />
+                        <point x="#Tankx0" y="-0.80" z="#Tankz0" />
+						<point x="#-0.0" y="-0.80" z="#Tankz0" />
+                        <layers vdp="0.5" />
+                    </drawextrude>
+					<drawextrude closed="false">
+                        <extrude x="0" y="1.60" z="0" />
+                        <point x="#0.0" y="-0.80" z="#Tankz0" />
+                        <point x="#Tankx1" y="-0.80" z="#Tankz1" />
+                        <point x="#Tankx2" y="-0.80" z="#Tankz2" />
+						<point x="#Tankx3" y="-0.80" z="#Tankz3" />
+                        <layers vdp="0.5" />
+                    </drawextrude>
+					<setfrdrawmode auto="false" />
+                    <!-- piston -->
+                    <setmkbound mk="10" />
+                    <drawbox>
+                        <boxfill>right</boxfill>
+                        <point x="#Pistonx0-Dp*5" y="-1" z="#Tankz0+Dp/2" />
+                        <size x="#Dp*5+Dp/2" y="2" z="#abs(Tankz0)+4*waveHeight" />
+                    </drawbox>	
+                    <!-- OWSC -->
+                    <setmkbound mk="15" />
+					<drawextrude closed="true">
+                        <extrude x="0" y="#1.31" z="0" />
+                        <point x="#-0.17/2" y="#-1.31/2" z="#hingePosZ+flapTrim+0.84" />
+                        <point x="#-0.17/2" y="#-1.31/2" z="#hingePosZ+flapTrim" />
+                        <point x="0"   		y="#-1.31/2" z="#hingePosZ" />
+						<point x="#0.17/2" y="#-1.31/2" z="#hingePosZ+flapTrim" />
+                        <point x="#0.17/2" y="#-1.31/2" z="#hingePosZ+flapTrim+0.84" />                        
+						<layers vdp="0" />
+                    </drawextrude>		
+                    <!-- <drawbox> -->
+                        <!-- <boxfill>solid</boxfill> -->
+                        <!-- <point x="#-0.17/2" y="#-1.31/2" z="#hingePosZ+flapTrim" /> -->
+                        <!-- <size x="#0.17" y="#1.31" z="#0.84-flapTrim" /> -->
+                    <!-- </drawbox>	 -->
+                    <shapeout file="hdp" />
+                    <resetdraw />
+                </list>
+                <mainlist>
+                    <!-- Actual geometry at dp/2 -->
+                    <runlist name="GeometryForNormals" />
+                    <!-- Particle generation -->
+                    <setshapemode>actual | bound</setshapemode>
+                    <setdrawmode mode="full" />
+                    <!-- piston -->
+                    <setmkbound mk="10" />
+                    <drawbox>
+                        <boxfill>solid</boxfill>
+                        <point x="#Pistonx0-Dp*5" y="-0.80" z="#Tankz0" />
+                        <size x="#Dp*5" y="1.60" z="#abs(Tankz0)+4*waveHeight" />
+                    </drawbox>
+					<shapeout file="piston" />
+                    <!-- tank -->
+                    <setmkbound mk="0" />
+                    <setfrdrawmode auto="false" />
+                    <drawextrude closed="false">
+                        <extrude x="0" y="1.60" z="0" />
+                        <point x="#Tankx0" y="-0.80" z="#Tankz0" />
+                        <point x="#Tankx1" y="-0.80" z="#Tankz1" />
+                        <point x="#Tankx2" y="-0.80" z="#Tankz2" />
+						<point x="#Tankx3" y="-0.80" z="#Tankz3" />
+                        <layers vdp="0*,-1,-2,-3,-4" />
+                    </drawextrude>
+                    <setfrdrawmode auto="false" />
+                    <!-- OWSC -->
+                    <setmkbound mk="15" />
+					<drawextrude closed="true">
+                        <extrude x="0" y="#1.31-Dp" z="0" />
+                        <point x="#-0.17/2" y="#-1.31/2+Dp/2" z="#hingePosZ+flapTrim+0.84" />
+                        <point x="#-0.17/2" y="#-1.31/2+Dp/2" z="#hingePosZ+flapTrim" />
+                        <point x="0" y="#-1.31/2+Dp/2" z="#hingePosZ" />
+						<point x="#0.17/2" y="#-1.31/2+Dp/2" z="#hingePosZ+flapTrim" />
+                        <point x="#0.17/2" y="#-1.31/2+Dp/2" z="#hingePosZ+flapTrim+0.84" />                        
+						<layers vdp="0.5*,1.5,2.5" />
+                    </drawextrude>					
+					<setfrdrawmode auto="false" />
+                    <!-- water 1 -->
+                    <setmkfluid mk="0" />
+                    <fillbox x="-2" y="0" z="-0.5">
+                        <modefill>void</modefill>
+                        <point x="-34" y="-1" z="#-depth" />
+                        <size x="60" y="2" z="#depth" />
+                    </fillbox>
+                    <!-- water 2 -->
+                    <setmkfluid mk="0" />
+                    <fillbox x="2" y="0" z="-0.5">
+                        <modefill>void</modefill>
+                        <point x="-6" y="-1" z="#-depth" />
+                        <size x="60" y="2" z="#depth" />
+                    </fillbox>
+                    <shapeout file="" reset="true" />
+                </mainlist>
+            </commands>
+        </geometry>
+        <normals active="true">
+            <norgeometry comment="Define initial configuration of normals before applying other configurations">
+            <geometryfile file="[CaseName]_hdp_Actual.vtk" comment="File with boundary geometry (VTK format)" />
+                <distanceh v="2.0" comment="Maximum orthogonal distance (H*value) to compute normals data (default=2)" />
+                <svshapes v="true" comment="Saves VTK with geometry in triangles and quads with its normals for debug (default=false)" />
+            </norgeometry>
+        </normals>
+        <floatings>
+            <floating mkbound="15">
+                <massbody value="#72.3+5" />
+                <center x="0" y="0" z="#hingePosZ+0.33" />
+                <inertia x="27.6" y="#14.76" z="13.11" />
+            </floating>
+        </floatings>
+        <motion>
+            <objreal ref="10">
+                <begin mov="1" start="0.00" />
+                <mvnull id="1" />
+            </objreal>
+        </motion>
+    </casedef>
+    <execution>
+        <special>
+            <wavepaddles>
+                <piston>
+                    <mkbound value="10" comment="Mk-Bound of selected particles" />
+                    <waveorder value="2" comment="Order wave generation 1:1st order, 2:2nd order (def=1)" />% To define the wave order for regular wave generation
+                    <start value="0" comment="Start time (def=0)" />% Instant when the piston-type wavemaker starts to move
+                    <duration value="0" comment="Movement duration, Zero is the end of simulation (def=0)" />% Duration of the piston-type wavemaker moving
+                    <depth value="#depth" comment="Fluid depth (def=0)" />% Water depth at the wavemaker position
+                    <pistondir x="1" y="0" z="0" comment="Movement direction (def=(1,0,0))" />% Direction of the piston-type wavemaker in X,Y,Z.
+                    <waveheight value="#waveHeight" comment="Wave height" />% Mean wave height to be generated
+                    <waveperiod value="#wavePeriod" comment="Wave period" />% Wave period to be generated
+                    <phase value="0" comment="Initial wave phase in function of PI (def=0)" />% Phase to define the initial movement in the sinusoidal
+                    <ramp value="4" comment="Periods of ramp (def=0)" />% Application of a transient mode(ramp) to the initial displacement (as function of wave period)
+                    <savemotion periods="24" periodsteps="20" xpos="2" zpos="-0.15" comment="Saves motion data. xpos and zpos are optional. zpos=-depth of the measuring point" />%% Saves theoretical elevation and orbital velocities (for 1st and 2nd order) at a given position (xpos and zpos)
+                    <awas_zsurf>
+                        <_startawas value="2" comment="Time to start AWAS correction (def=ramp*waveperiod)" />
+                        <swl value="0.0" comment="Still water level (free-surface water)" />
+                        <elevation value="2" comment="Order wave to calculate elevation 1:1st order, 2:2nd order (def=2)" />
+                        <gaugex valueh="4" comment="Position in X from piston to measure free-surface water (def=5*Dp)" />
+                        <gaugey value="0" comment="Position in Y to measure free-surface water" />
+                        <gaugezmin value="#-waveHeight" comment="Minimum position in Z to measure free-surface water, it must be in water (def=domain limits)" />
+                        <gaugezmax value="#waveHeight" comment="Maximum position in Z to measure free-surface water (def=domain limits)" />
+                        <gaugedp value="0.1" comment="Resolution to measure free-surface water, it uses Dp*gaugedp (def=0.1)" />
+                        <coefmasslimit value="0.5" comment="Coefficient to calculate mass of free-surface (def=0.5 on 3D and 0.4 on 2D)" />
+                        <savedata value="1" comment="Saves CSV with information 1:by part, 2:more info 3:by step (def=0)" />
+                        <limitace value="2" comment="Factor to limit maximum value of acceleration, with 0 disabled (def=2)" />
+                        <!-- <correction coefstroke="1.8" coefperiod="1" powerfunc="3" comment="Drift correction configuration (def=no applied)" /> -->
+                    </awas_zsurf>
+                </piston>
+            </wavepaddles>
+            <chrono>
+                <savedata value="0.02" comment="Saves CSV with data exchange for each time interval (0=all steps)" />
+                <schemescale value="1" comment="Scale used to create the initial scheme of Chrono objects (default=1)" />
+                <bodyfixed id="floor" mkbound="0" />
+                <bodyfloating id="flap" mkbound="15" />
+                <link_hinge idbody1="flap">
+                    <rotpoint x="0.0" y="0.0" z="#hingePosZ" comment="Point for rotation" />
+                    <rotvector x="0.0" y="1.0" z="0.0" comment="Vector direction for rotation" />
+                    <stiffness value="0.0" comment="Torsional stiffness [Nm/rad]" />
+                    <damping value="0.0" comment="Torsional damping [Nms/rad]" />
+                </link_hinge>
+				<link_coulombdamping idbody1="flap" idbody2="floor">
+                    <point_fb1 x="#0.17/2" y="0" z="#hingePosZ+0.47" comment="Point in body 1" />
+                    <point_fb2 x="1.04" y="0" z="#hingePosZ" comment="Point in body 2" />
+                    <stiffness value="0" comment="Stiffness [N/m]" />
+                    <damping value="#1/0.47*0.16+60" comment="Damping [-]" />
+                    <rest_length value="1" comment="Spring equilibrium length [m]" />
+                    <savevtk>
+                        <nside value="16" comment="number of sections for each revolution. 0=not saved, 1=line (default=16)" />
+                        <radius value="1" comment="spring radius (default=3)" />
+                        <length value="1" comment="length for each revolution (default=1)" />
+                    </savevtk>
+                </link_coulombdamping>
+            </chrono>
+			<damping>
+                <dampingzone>
+                    <limitmin x="#Tankx1" y="0" z="0" comment="Location where minimum reduction is applied" />
+                    <limitmax x="#Tankx3" y="0" z="0" comment="Location where maximum reduction is applied" />
+                    <overlimit value="0" comment="The scope of maximum reduction over limitmax (def=0)" />
+                    <redumax value="5" comment="Maximum reduction in location limitmax (def=10)" />
+                    <factorxyz x="1" y="0" z="1" comment="Application factor in components (def x=1,y=1,z=1)" />
+                </dampingzone>
+            </damping>
+        </special>
+        <parameters>
+            <parameter key="SavePosDouble" value="0" comment="Saves particle position using double precision (default=0)" />
+            <parameter key="Boundary" value="2" comment="Boundary method 1:DBC, 2:mDBC (default=1)" />
+            <parameter key="SlipMode" value="1" comment="Slip mode for mDBC 1:DBC vel=0, 2:No-slip, 3:Free slip (default=1)" />
+			<parameter key="StepAlgorithm" value="2" comment="Step Algorithm 1:Verlet, 2:Symplectic (default=1)" />
+            <parameter key="VerletSteps" value="40" comment="Verlet only: Number of steps to apply Euler timestepping (default=40)" />
+            <parameter key="Kernel" value="2" comment="Interaction Kernel 1:Cubic Spline, 2:Wendland (default=2)" />
+            <parameter key="ViscoTreatment" value="3" comment="Viscosity formulation 1:Artificial, 2:Laminar+SPS (default=1)" />
+            <parameter key="Visco" value="0.000001" comment="Viscosity value" />
+            <parameter key="ViscoBoundFactor" value="1" comment="Multiply viscosity value with boundary (default=1)" />
+            <parameter key="DensityDT" value="3" comment="Density Diffusion Term 0:None, 1:Molteni, 2:Fourtakas, 3:Fourtakas(full) (default=0)" />
+            <parameter key="DensityDTvalue" value="0.10" comment="DDT value (default=0.1)" />
+            <parameter key="Shifting" value="0" comment="Shifting mode 0:None, 1:Ignore bound, 2:Ignore fixed, 3:Full (default=0)" />
+            <parameter key="ShiftCoef" value="-2" comment="Coefficient for shifting computation (default=-2)" />
+            <parameter key="ShiftTFS" value="0" comment="Threshold to detect free surface. Typically 1.5 for 2D and 2.75 for 3D (default=0)" />
+            <parameter key="RigidAlgorithm" value="3" comment="Rigid Algorithm 0:collision-free, 1:SPH, 2:DEM, 3:Chrono (default=1)" />
+            <parameter key="FtPause" value="0.0" comment="Time to freeze the floatings at simulation start (warmup) (default=0)" units_comment="seconds" />
+            <parameter key="CoefDtMin" value="0.01" comment="Coefficient to calculate minimum time step dtmin=coefdtmin*h/speedsound (default=0.05)" />
+            <parameter key="DtIni" value="#2*Dp/1500" comment="Initial time step. Use 0 to defult use (default=h/speedsound)" units_comment="seconds" />
+            <parameter key="DtMin" value="0" comment="Minimum time step. Use 0 to defult use (default=coefdtmin*h/speedsound)" units_comment="seconds" />
+            <parameter key="DtFixed" value="0" comment="Fixed Dt value. Use 0 to disable (default=disabled)" units_comment="seconds" />
+            <parameter key="DtFixedFile" value="NONE" comment="Dt values are loaded from file. Use NONE to disable (default=disabled)" units_comment="milliseconds (ms)" />
+            <parameter key="DtAllParticles" value="1" comment="Velocity of particles used to calculate DT. 1:All, 0:Only fluid/floating (default=0)" />
+            <parameter key="TimeMax" value="40" comment="Time of simulation" units_comment="seconds" />
+            <parameter key="TimeOut" value="0.25" comment="Time out data" units_comment="seconds" />
+            <parameter key="TimeOutExtra" value="0.01" />			 
+            <parameter key="MinFluidStop" value="0" comment="%/100 of fluid particles allowed to be excluded from domain (default=1)" units_comment="decimal" />
+            <parameter key="RhopOutMin" value="700" comment="Minimum rhop valid (default=700)" units_comment="kg/m^3" />
+            <parameter key="RhopOutMax" value="1300" comment="Maximum rhop valid (default=1300)" units_comment="kg/m^3" />
+            <parameter key="YPeriodicIncZ" value="0.0" comment="Increase of Z with periodic BC" />
+            <simulationdomain comment="Defines domain of simulation (default=Uses minimun and maximum position of the generated particles)">
+                <posmin x="default" y="default" z="default" comment="e.g.: x=0.5, y=default-1, z=default-10%" />
+                <posmax x="default" y="default" z="default" />
+            </simulationdomain>
+        </parameters>
+    </execution>
+</case>

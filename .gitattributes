@@ -1,0 +1,5 @@
+FOSWEC/out_*   export-ignore
+Multifloat_M4/out_*  export-ignore
+OWSC/out_*  export-ignore
+UUWEC/out_*  export-ignore
+figures/               export-ignore
