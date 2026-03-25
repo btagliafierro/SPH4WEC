@@ -3,7 +3,7 @@
 > **DualSPHysics input files for four wave energy converter benchmarks**
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19212580.svg)](https://doi.org/10.5281/zenodo.19225048)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19225048.svg)](https://doi.org/10.5281/zenodo.19225048)
 
 This repository contains the configuration files required to reproduce the SPH simulations of four wave energy converter (WEC) devices, as presented in the following companion publications:
 
@@ -171,7 +171,7 @@ If the DualSPHysics executables are not found automatically, edit the `dirbin` v
 
 | Resource | Link | Description |
 |---|---|---|
-| Zenodo archive | [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19212580.svg)](https://doi.org/10.5281/zenodo.19212580) | Citable snapshot tied to the companion publications |
+| Zenodo archive | [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19225048.svg)](https://doi.org/10.5281/zenodo.19225048) | Citable snapshot tied to the companion publications |
 | GitHub repository | [btagliafierro/SPH4WEC](https://github.com/btagliafierro/SPH4WEC) | Living repository — updates, fixes, and new versions |
 
 > If you are reproducing the results of the companion papers, use the **Zenodo archive**.
