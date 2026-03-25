@@ -187,8 +187,8 @@ If you use these files in your work, please cite the Zenodo archive:
   title     = {{SPH4WEC}: DualSPHysics input files for four wave energy converter benchmarks},
   year      = {2026},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.19212580},
-  url       = {https://doi.org/10.5281/zenodo.19212580}
+  doi       = {10.5281/zenodo.19225048},
+  url       = {https://doi.org/10.5281/zenodo.19225048}
 }
 ```
 ---
