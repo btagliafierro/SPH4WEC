@@ -7,10 +7,10 @@
 
 This repository contains the configuration files required to reproduce the SPH simulations of four wave energy converter (WEC) devices, as presented in the following companion publications:
 
-- Tagliafierro et al. (2026). *High-fidelity Simulations for Wave Energy Converters — A Review of the Contribution of the Smoothed Particle Hydrodynamics Method.* Energy Reports. *(under review)*
-- Tagliafierro et al. (2026). *Implementation and validation of DualSPHysics v5.4 for the simulation of wave energy converters: governing equations, multiphysics coupling, and four representative benchmarks.* MethodsX. *(co-submitted)*
+- Tagliafierro et al. (2026). *High-fidelity Simulations for Wave Energy Converters — A Review of the Contribution of the Smoothed Particle Hydrodynamics Method.* Energy Reports. *(in preparation)*
+- Tagliafierro et al. (2026). *Implementation and validation of DualSPHysics v5.4 for the simulation of wave energy converters: governing equations, multiphysics coupling, and four representative benchmarks.* MethodsX. *(to be co-submitted)*
 
-All simulations were run using **DualSPHysics v5.4.3**. Other versions may work but compatibility is only guaranteed for v5.4.3.
+All simulations were run using **DualSPHysics v5.4.3**, and their outcomes are described and discussed on the MethodsX paper. Other versions may work but compatibility is only guaranteed for v5.4.3.
 
 ---
 
@@ -29,12 +29,12 @@ All simulations were run using **DualSPHysics v5.4.3**. Other versions may work 
 | **PTO** | Rotational |
 | **Folder** | `OWSC/` |
 
-|  | SPH1 | SPH2 | SPH3 |
+<!-- |  | SPH1 | SPH2 | SPH3 |
 |---|---:|---:|---:|
 | Δp [m] | 0.04 | 0.03 | 0.02 |
 | Particles [×10⁶] | 1.28 | 3.77 | 27.53 |
 | Runtime [h] | 0.70 | 2.68 | 41.6 |
-| RTF [-] | 60 | 241 | 3745 |
+| RTF [-] | 60 | 241 | 3745 | -->
 
 
 ![IMFIA-OWSC simulation snapshot](figures/fig_owsc_snaps.png)
@@ -93,7 +93,7 @@ Each device folder follows the same layout:
 └── runGPU.sh                  # Runs a single user-specified case on GPU
 ```
 
-> **Note:** The UUWEC buoy geometry is defined analytically inside the XML file; no STL is required for that case.
+> **Note:** The UUWEC buoy geometry is defined analytically inside the XML file; no STL is required for that case. This folder also includes an extra XML file for the definition of multi-body contact features.
 
 ### Resolution convention
 
