@@ -162,7 +162,7 @@ If the DualSPHysics executables are not found automatically, edit the `dirbin` v
 | `OWSC/` | Brito et al. (2020), *Renew. Energy* 146, 2024–2043. [doi:10.1016/j.renene.2019.08.034](https://doi.org/10.1016/j.renene.2019.08.034) | Brito et al. (2020), *Renew. Energy* 151, 975–992. [doi:10.1016/j.renene.2019.11.094](https://doi.org/10.1016/j.renene.2019.11.094) |
 | `UUWEC/` | Tagliafierro et al. (2022), *Appl. Energy*. [doi:10.1016/j.apenergy.2022.118629](https://doi.org/10.1016/j.apenergy.2022.118629) | Göteman et al. (2015), *International ocean and polar engineering conference* |
 | `Multifloat_M4/` | Carpintero Moreno et al. (2020), *Proceedings of 4th International Conference on Renewable Energies Offshore* | Santo et al. (2017), *Journal of Fluid Mechanics* [doi.org/10.1017/jfm.2016.872](https://doi.org/10.1017/jfm.2016.872) |
-| `FOSWEC/` | Tagliafierro et al. (2022), *OMAE2022*. | Ruehl et al. (2020), *Ocean Engineering*. [doi.org/10.1016/j.oceaneng.2019.523106575.524](https://doi.org/10.1016/j.oceaneng.2019.523106575.524) |
+| `FOSWEC/` | Tagliafierro et al. (2022), *OMAE2022*. | Ruehl et al. (2020), *Ocean Engineering*. [doi.org/10.1016/j.oceaneng.2019.106575](https://doi.org/10.1016/j.oceaneng.2019.106575) |
 
 ---
 
